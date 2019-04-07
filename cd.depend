@@ -1,11 +1,10 @@
 # depslib dependency file v1.0
-1554616276 source:c:\users\kiran\documents\projects\cd\main.c
+1554624445 source:c:\users\kiran\documents\projects\cd\main.c
 	<stdio.h>
 	<stdbool.h>
 	<string.h>
 
-1554616076 source:c:\users\kiran\documents\projects\cd\my.c
-	<stdio.h>
+1554616315 source:c:\users\kiran\documents\projects\cd\my.c
 	<stdbool.h>
 	<string.h>
 

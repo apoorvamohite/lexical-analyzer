@@ -48,11 +48,14 @@ int main()
     while((ch = fgetc(fp)) != EOF)
       str[x++]=ch;
     str[x]='\0';
+    //printf("%s", str);
     x=0;
 
     char subs[50];
     char num[50];
-    int state=-1, slen=0, nlen=0;
+    char lit[50];
+    int state=-1, slen=0, nlen=0, llen=0;
+
     while(1)
     {
         c = str[i];
@@ -143,7 +146,8 @@ int main()
                         printf("* <OPERATOR, MUL>\n");
                         break;
                     case '/':
-                        printf("/ <OPERATOR, DIV>\n");
+                        //printf("/ <OPERATOR, DIV>\n");
+                        state=24;
                         break;
                     case '%':
                         printf("%% <OPERATOR, MOD>\n");
@@ -214,6 +218,9 @@ int main()
                         printf("} <OPERATOR, RBRACE>\n");
                         break;
 
+                    case '"':
+                        state=22;
+                        break;
 
                     case ' ':
                     case '\b':
@@ -226,20 +233,20 @@ int main()
                         return 0;
                 }
                 break;
-            /*case 0:
-                if(str[i]=='<')
-                {
-                    state=1;
-                }
-                else if(str[i]=='=')
-                {
-                    state=5;
-                }
-                else if(str[i]=='>')
-                {
-                    state=6;
-                }
-                break;*/
+            //case 0:
+                //if(str[i]=='<')
+                //{
+                    //state=1;
+                //}
+                //else if(str[i]=='=')
+                //{
+                    //state=5;
+                //}
+                //else if(str[i]=='>')
+                //{
+                    //state=6;
+                //}
+                //break;
             case 1:
                 if(c=='=')
                 {
@@ -256,10 +263,12 @@ int main()
                 break;
             case 2:
                 printf("<= <RELOP, LE>\n");
+                i--;
                 state=-1;
                 break;
             case 3:
                 printf("<> <RELOP, NE>\n");
+                i--;
                 state=-1;
                 break;
             case 4:
@@ -269,6 +278,7 @@ int main()
                 break;
             case 5:
                 printf("= <RELOP, EQ>\n");
+                i--;
                 state=-1;
                 break;
             case 6:
@@ -283,6 +293,7 @@ int main()
                 break;
             case 7:
                 printf(">= <RELOP, GE>\n");
+                i--;
                 state=-1;
                 break;
             case 8:
@@ -424,7 +435,7 @@ int main()
                     printf(" ");
                     printf("<NUMBER>\n");
                     i--;
-                    subs[0]='\0';
+                    num[0]='\0';
                     state=-1;
                 }
                 else
@@ -434,43 +445,83 @@ int main()
                 }
                 break;
             case 20:
-                if(c==' ')
-                {
-                    substring(num, str, i-nlen,nlen);
-                    for(x=0; x<strlen(num); x++)
-                        printf("%c", num[x]);
-                    nlen=0;
-                    printf(" ");
-                    printf("<NUMBER>\n");
-                    i--;
-                    subs[0]='\0';
-                    state=-1;
-                }
-                else
-                {
-                    printf("ERROR\n");
-                    state=-1;
-                }
+                substring(num, str, i-nlen,nlen);
+                for(x=0; x<strlen(num); x++)
+                    printf("%c", num[x]);
+                nlen=0;
+                printf(" ");
+                printf("<NUMBER>\n");
+                i--;
+                num[0]='\0';
+                state=-1;
                 break;
             case 21:
-                if(c==' ')
+                substring(num, str, i-nlen,nlen);
+                for(x=0; x<strlen(num); x++)
+                    printf("%c", num[x]);
+                nlen=0;
+                printf(" ");
+                printf("<NUMBER>\n");
+                i--;
+                num[0]='\0';
+                state=-1;
+                break;
+            case 22:
+                if(c=='"')
                 {
-                    substring(num, str, i-nlen,nlen);
-                    for(x=0; x<strlen(num); x++)
-                        printf("%c", num[x]);
-                    nlen=0;
-                    printf(" ");
-                    printf("<NUMBER>\n");
-                    i--;
-                    subs[0]='\0';
-                    state=-1;
+                    state=23;
+                    llen++;
                 }
                 else
                 {
-                    printf("ERROR");
+                    state=22;
+                    llen++;
+                }
+                break;
+            case 23:
+                substring(lit, str, i-llen-1,llen+1);
+                for(x=0; x<strlen(lit); x++)
+                    printf("%c", lit[x]);
+                llen=0;
+                printf(" ");
+                printf("<LITERAL>\n");
+                i--;
+                lit[0]='\0';
+                state=-1;
+                break;
+            case 24:
+                if(c=='/')
+                {
+                    while(str[i]!='\n')
+                        i++;
+                    state=-1;
+                }
+                else if(c=='*')
+                {
+                    state=26;
+                }
+                else
+                {
+                    printf("/ <OPERATOR, DIV>\n");
+                    i--;
                     state=-1;
                 }
                 break;
+            case 26:
+                if(c=='*')
+                {
+                    state=27;
+                }
+                else
+                {
+                    state=26;
+                }
+                break;
+            case 27:
+                if(c=='/')
+                {
+                    state=-1;
+                }
         }
         i++;
     }
