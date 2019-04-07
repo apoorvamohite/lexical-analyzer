@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1554616276 source:c:\users\kiran\documents\projects\cd\main.c
+	<stdio.h>
+	<stdbool.h>
+	<string.h>
+
+1554616076 source:c:\users\kiran\documents\projects\cd\my.c
+	<stdio.h>
+	<stdbool.h>
+	<string.h>
+
+1554614006 source:c:\users\kiran\documents\projects\cd\cd.cpp
+
